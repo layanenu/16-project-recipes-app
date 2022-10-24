@@ -5,7 +5,7 @@ import Login from '../pages/Login';
 
 test('Testando tela de Login', () => {
   const EMAIL = 'trybe@gmail.com';
-  const PASSWORD = '123456';
+  const PASSWORD = '1234567';
   // Este arquivo pode ser modificado ou deletado sem problemas
   render(<Login />);
   const h1 = screen.getByText(/Login/i);
@@ -21,15 +21,11 @@ test('Testando tela de Login', () => {
   expect(btn).toBeInTheDocument();
   expect(btn).toBeDisabled();
 
+  expect(window.location.pathname).toBe('/');
+
   userEvent.type(email, EMAIL);
   userEvent.type(password, PASSWORD);
   expect(btn).not.toBeDisabled();
+
   userEvent.click(btn);
-
-  const storedUserEmail = JSON.parse(localStorage.getItem('user'));
-  console.log(storedUserEmail);
-  expect(storedUserEmail.length).toBe(1);
-  expect(spy).toBeCalled();
-
-  expect(window.location.pathname).toBe('/');
 });

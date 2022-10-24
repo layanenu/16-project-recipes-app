@@ -8,7 +8,6 @@ function Login() {
   const history = useHistory();
 
   const verifyLogin = async () => {
-    console.log('aqui');
     const NUM = 6;
     const regex = /\S+@\S+\.\S+/;
     const verifyEmail = regex.test(email);
@@ -43,6 +42,9 @@ function Login() {
       <form
         onSubmit={ handleSubmit }
       >
+        <div>
+          <h1>Login</h1>
+        </div>
         <div>
           <input
             type="email"

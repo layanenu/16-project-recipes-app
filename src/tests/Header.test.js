@@ -24,6 +24,12 @@ describe('Testando component Header', () => {
     expect(pathname).toBe('/meals');
     expect(searchIcon).toBeInTheDocument();
     expect(pageName).toBeInTheDocument();
+
+    // const drinks = screen.getAllByRole('button');
+
+    // userEvent.click(drinks[1]);
+
+    // expect(pathname).toBe('/drinks');
   });
 
   test('Testa se o link  funciona e se o pageIcon é renderizado somente nas rotas corretas', () => {
@@ -47,7 +53,7 @@ describe('Testando component Header', () => {
     expect(searchIcon).not.toBeInTheDocument();
   });
 
-  test('verifica aa rota Done recipes', () => {
+  test('verifica a rota Done recipes', () => {
     const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
 
     act(() => {

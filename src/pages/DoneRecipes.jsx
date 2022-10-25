@@ -3,7 +3,9 @@ import Header from '../components/Header';
 
 function DoneRecipes() {
   return (
-    <Header />
+    <div>
+      <Header />
+    </div>
   );
 }
 

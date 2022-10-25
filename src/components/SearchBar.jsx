@@ -3,6 +3,7 @@ import MyContext from '../context/MyContext';
 
 function SearchBar() {
   const { hideSearchInput } = useContext(MyContext);
+
   return (
     <div>
       {hideSearchInput
@@ -44,7 +45,6 @@ function SearchBar() {
             SEARCH
           </button>
         </form>)}
-    </div>
   );
 }
 

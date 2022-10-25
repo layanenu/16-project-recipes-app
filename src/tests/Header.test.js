@@ -4,10 +4,11 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
+import MyProvider from '../context/MyProvider';
 
 describe('Testando component Header', () => {
   test('testa se os elementos de profile, search e nome são renderizados', () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
 
     act(() => {
       history.push('/meals');
@@ -26,7 +27,7 @@ describe('Testando component Header', () => {
   });
 
   test('Testa se o link  funciona e se o pageIcon é renderizado somente nas rotas corretas', () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
 
     act(() => {
       history.push('/meals');
@@ -47,7 +48,7 @@ describe('Testando component Header', () => {
   });
 
   test('verifica aa rota Done recipes', () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
 
     act(() => {
       history.push('/done-recipes');

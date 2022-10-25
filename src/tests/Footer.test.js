@@ -11,7 +11,6 @@ import MyProvider from '../context/MyProvider';
 describe('Testando o componente Footer', () => {
   test('Testa se os ícones estão no documento', () => {
     const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
-    const { location: { pathname } } = history;
     act(() => {
       history.push('/meals');
     });
@@ -26,9 +25,6 @@ describe('Testando o componente Footer', () => {
 
     expect(drink).toBeInTheDocument();
     expect(meals).toBeInTheDocument();
-
-    userEvent.click(meals);
-    expect(pathname).toBe('/');
   });
 
   test('Testa se os ícones Meals funcionam e levam para sua respectiva página', () => {
@@ -36,28 +32,31 @@ describe('Testando o componente Footer', () => {
     const { location: { pathname } } = history;
     expect(pathname).toBe('/drinks');
 
-    const meals = screen.getByRole('button', {
+    const meals = screen.getByRole('img', {
       name: /meals/i,
     });
+
+    expect(meals).toBeInTheDocument();
 
     userEvent.click(meals);
 
     expect(pathname).toBe('/meals');
   });
 
-  // test('verifica aa rota Done recipes', () => {
-  //   const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
+  test('testa o icone Drinks', () => {
+    const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
+    const { pathname } = history.location;
 
-  //   act(() => {
-  //     history.push('/done-recipes');
-  //   });
+    const email = screen.getByRole('textbox');
+    const password = screen.getByPlaceholderText(/password/i);
 
-  //   const { pathname } = history.location;
+    userEvent.type(email, 'jf.furieri@ymail.com');
+    userEvent.type(password, '12345678');
 
-  //   expect(pathname).toBe('/done-recipes');
+    const button = screen.getByRole('button', { name: /enter/i });
 
-  //   const doneRecipes = screen.getByRole('heading', { name: /done recipes/i });
+    userEvent.click(button);
 
-  //   expect(doneRecipes).toBeInTheDocument();
-  // });
+    expect(pathname).toBe('/meals');
+  });
 });

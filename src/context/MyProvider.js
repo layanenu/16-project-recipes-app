@@ -1,9 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import MyContext from './MyContext';
 
 function MyProvider({ children }) {
-  const context = useMemo(() => ({ hello: 'oi' }));
+  const [hideSearchInput, setHideSearchInput] = useState(false);
+
+  const hideSearchBar = () => {
+    setHideSearchInput(!hideSearchInput);
+  };
+
+  const context = useMemo(() => ({ hideSearchInput, setHideSearchInput, hideSearchBar }));
 
   return (
     <MyContext.Provider value={ context }>

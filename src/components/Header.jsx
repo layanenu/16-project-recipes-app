@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 // import { propTypes } from 'react-bootstrap/esm/Image';
 import { useLocation, Link } from 'react-router-dom';
+import MyContext from '../context/MyContext';
+import SearchBar from './SearchBar';
 import '../images/profileIcon.svg';
 
 function Header() {
+  const { hideSearchBar } = useContext(MyContext);
   const location = useLocation();
 
   // Daqui pra baixo é gambiarra não me pergunte o que eu fiz aqui
@@ -39,18 +43,21 @@ function Header() {
         && location.pathname !== '/done-recipes'
         && location.pathname !== '/favorite-recipes'
           ? (
+            <button type="button" onClick={ hideSearchBar }>
+              <img
+                src="../images/searchIcon.svg"
+                alt="searchIcon"
+                data-testid="search-top-btn"
+              />
+            </button>
 
-            <img
-              src="../images/searchIcon.svg"
-              alt="searchIcon"
-              data-testid="search-top-btn"
-            />
           ) : <div />}
+        {/* <button type="button" onClick={ hideSearchBar }>Pesquisar</button> */}
         <h1 data-testid="page-title">{frase}</h1>
       </div>
 
       <div />
-
+      <SearchBar />
     </div>
   );
 }

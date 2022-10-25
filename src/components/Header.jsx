@@ -13,7 +13,7 @@ function Header() {
   for (let i = 0; i < palavra.length; i += 1) {
     palavra[i] = palavra[i][0].toUpperCase() + palavra[i].substr(1);
   }
-  console.log(palavra);
+  // console.log(palavra);
   const first = palavra[0];
   const second = palavra[1];
   let frase = '';
@@ -22,7 +22,7 @@ function Header() {
   } else {
     frase = `${first} ${second}`;
   }
-  console.log(frase);
+  // console.log(frase);
   return (
     <div>
       <div className="nosso_Header">

@@ -2,23 +2,38 @@ import React, { useContext } from 'react';
 import MyContext from '../context/MyContext';
 
 function SearchBar() {
-  const { hideSearchInput } = useContext(MyContext);
+  const { hideSearchInput,
+    ingredient,
+    food,
+    name,
+    letter,
+    handleInput,
+    handleSubmit,
+    handleRadioIngredient,
+    handleRadioName,
+    handleRadioLetter,
+  } = useContext(MyContext);
 
   return (
     <div>
       {hideSearchInput
       && (
-        <form className="search-bar-form">
+        <form className="search-bar-form" onSubmit={ handleSubmit }>
           <input
             type="text"
             data-testid="search-input"
             placeholder="Search"
+            value={ food }
+            onChange={ handleInput }
           />
           <label htmlFor="ingredient-search-radio">
             <input
               type="radio"
               data-testid="ingredient-search-radio"
-              name="ingredient-search-radio"
+              name="ts"
+              value={ ingredient }
+              onChange={ handleRadioIngredient }
+
             />
             Ingredient
           </label>
@@ -26,7 +41,9 @@ function SearchBar() {
             <input
               type="radio"
               data-testid="name-search-radio"
-              name="name-search-radio"
+              name="ts"
+              value={ name }
+              onChange={ handleRadioName }
             />
             Name
           </label>
@@ -34,7 +51,9 @@ function SearchBar() {
             <input
               type="radio"
               data-testid="first-letter-search-radio"
-              name="first-letter-search-radio"
+              name="ts"
+              value={ letter }
+              onChange={ handleRadioLetter }
             />
             Letter
           </label>

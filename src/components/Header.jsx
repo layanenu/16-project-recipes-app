@@ -1,6 +1,6 @@
 import React from 'react';
 // import { propTypes } from 'react-bootstrap/esm/Image';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import '../images/profileIcon.svg';
 
 function Header() {
@@ -26,24 +26,29 @@ function Header() {
   return (
     <div>
       <div className="nosso_Header">
-        <img
-          src="../images/profileIcon.svg"
-          alt="perfil"
-          data-testid="profile-top-btn"
-        />
+        <div>
+          <Link to="/profile">
+            <img
+              src="../images/profileIcon.svg"
+              alt="perfil"
+              data-testid="profile-top-btn"
+            />
+          </Link>
+        </div>
         {location.pathname !== '/profile'
         && location.pathname !== '/done-recipes'
         && location.pathname !== '/favorite-recipes'
           ? (
+
             <img
               src="../images/searchIcon.svg"
               alt="searchIcon"
               data-testid="search-top-btn"
-            />) : <div />}
+            />
+          ) : <div />}
         <h1 data-testid="page-title">{frase}</h1>
       </div>
-      :
-      {' '}
+
       <div />
 
     </div>

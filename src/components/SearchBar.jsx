@@ -1,18 +1,48 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 
 function SearchBar() {
+  const { pathname } = useLocation();
+
   const { hideSearchInput,
     ingredient,
     food,
     name,
     letter,
+    dataDrink,
+    dataFood,
+    filterFood,
+    filterDrink,
     handleInput,
-    handleSubmit,
     handleRadioIngredient,
     handleRadioName,
     handleRadioLetter,
   } = useContext(MyContext);
+
+  const verifyApiFood = () => {
+    if (dataFood?.length === 0) {
+      return global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  };
+
+  const verifyApiDrink = () => {
+    if (dataDrink?.length === 0) {
+      return global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (pathname === '/meals') {
+      await filterFood();
+      verifyApiFood();
+    }
+    if (pathname === '/drinks') {
+      await filterDrink();
+      verifyApiDrink();
+    }
+  };
 
   return (
     <div>

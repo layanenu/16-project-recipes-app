@@ -13,7 +13,6 @@ function MyProvider({ children }) {
   const [letter, setLetter] = useState(false);
   const [dataFood, setDataFood] = useState([]);
   const [dataDrink, setDataDrink] = useState([]);
-  const MAX = 12;
 
   useEffect(() => {
     if (dataDrink?.length === 1) {
@@ -61,21 +60,19 @@ function MyProvider({ children }) {
       if (ingredient) {
         const responseIngredientsFood = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${food}`);
         const dataIngredientsFood = await responseIngredientsFood.json();
-        const dif = dataIngredientsFood.meals.filter((e, index) => index < MAX);
-        return setDataFood(dif);
+
+        return setDataFood(dataIngredientsFood.meals);
       } if (name) {
         const responseNameFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${food}`);
         const dataNameFood = await responseNameFood.json();
-        const dnf = dataNameFood.meals.filter((e, index) => index < MAX);
 
-        return setDataFood(dnf);
+        return setDataFood(dataNameFood.meals);
       }
       if (letter && food.length === 1) {
         const responseFirstLetterFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${food[0]}`);
         const dataFirstLetterFood = await responseFirstLetterFood.json();
-        const dflf = dataFirstLetterFood.meals.filter((e, index) => index < MAX);
 
-        return setDataFood(dflf);
+        return setDataFood(dataFirstLetterFood.meals);
       }
       return global.alert('Your search must have only 1 (one) character');
     } catch (e) {
@@ -88,22 +85,19 @@ function MyProvider({ children }) {
       if (ingredient) {
         const responseIngredientsDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drink}`);
         const dataIngredientsDrink = await responseIngredientsDrink.json();
-        const did = dataIngredientsDrink.drinks.filter((e, index) => index < MAX);
 
-        return setDataDrink(did);
+        return setDataDrink(dataIngredientsDrink.drinks);
       } if (name) {
         const responseNameDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`);
         const dataNameDrink = await responseNameDrink.json();
-        const dnd = dataNameDrink.drinks.filter((e, index) => index < MAX);
 
-        return setDataDrink(dnd);
+        return setDataDrink(dataNameDrink.drinks);
       }
       if (letter && drink.length === 1) {
         const responseFirstLetterDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${drink[0]}`);
         const dataFirstLetterDrink = await responseFirstLetterDrink.json();
-        const dfld = dataFirstLetterDrink.drinks.filter((e, index) => index < MAX);
 
-        return setDataDrink(dfld);
+        return setDataDrink(dataFirstLetterDrink.drinks);
       }
       return global.alert('Your search must have only 1 (one) character');
     } catch (e) {

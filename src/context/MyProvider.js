@@ -9,6 +9,7 @@ function MyProvider({ children }) {
   const [ingredient, setIngredient] = useState(false);
   const [name, setName] = useState(false);
   const [letter, setLetter] = useState(false);
+
   /*   const [dataFood, setDataFood] = useState([]);
   const [dataDrink, setDataDrink] = useState([]); */
 

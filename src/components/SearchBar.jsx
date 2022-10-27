@@ -16,9 +16,12 @@ function SearchBar() {
     handleRadioIngredient,
     handleRadioName,
     handleRadioLetter,
+    setShowSearch,
+    ShowSearch,
   } = useContext(MyContext);
 
   const handleSubmit = async (e) => {
+    setShowSearch(!ShowSearch);
     e.preventDefault();
     if (pathname === '/meals') {
       await filterFood();

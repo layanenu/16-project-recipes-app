@@ -5,14 +5,13 @@ import MyContext from '../context/MyContext';
 import Recipes from './Recipes';
 
 function Drinks() {
-  const { dataDrink } = useContext(MyContext);
+  const { dataDrink, showSearch } = useContext(MyContext);
   const MAX = 12;
 
   return (
     <div>
       <Header />
-      {console.log(dataDrink)}
-      {dataDrink?.filter((x, i) => i < MAX)
+      {showSearch ? dataDrink?.filter((x, i) => i < MAX)
         .map((e, index) => (
           <div data-testid={ `${index}-recipe-card` } key={ e.idDrink }>
             <div data-testid={ `${index}-card-name` }>{e.strDrink}</div>
@@ -22,8 +21,7 @@ function Drinks() {
               alt={ e.strDrink }
             />
           </div>
-        ))}
-      <Recipes />
+        )) : <Recipes /> }
       <Footer />
     </div>
   );

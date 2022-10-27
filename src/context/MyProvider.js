@@ -97,7 +97,6 @@ function MyProvider({ children }) {
   }, [food, ingredient, letter, name, verifyApiFood]);
 
   const filterDrink = useCallback(async () => {
-    console.log(ingredient);
     try {
       if (ingredient) {
         const responseIngredientsDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drink}`);

@@ -10,8 +10,6 @@ function SearchBar() {
     food,
     name,
     letter,
-    dataDrink,
-    dataFood,
     filterFood,
     filterDrink,
     handleInput,
@@ -20,27 +18,13 @@ function SearchBar() {
     handleRadioLetter,
   } = useContext(MyContext);
 
-  const verifyApiFood = () => {
-    if (dataFood?.length === 0) {
-      return global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-  };
-
-  const verifyApiDrink = () => {
-    if (dataDrink?.length === 0) {
-      return global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (pathname === '/meals') {
       await filterFood();
-      verifyApiFood();
     }
     if (pathname === '/drinks') {
       await filterDrink();
-      verifyApiDrink();
     }
   };
 

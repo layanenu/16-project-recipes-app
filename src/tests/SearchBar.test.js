@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../helpers/renderWithRouter';
@@ -8,6 +8,7 @@ import MyProvider from '../context/MyProvider';
 
 describe('Testando componente SearchBar', () => {
   const text = 'Sorry, we haven\'t found any recipes for these filters.';
+  const text2 = 'Your search must have only 1 (one) character';
 
   it('Testando os inputs', () => {
     const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
@@ -53,13 +54,6 @@ describe('Testando componente SearchBar', () => {
     userEvent.type(inputKey, 'tomate');
     userEvent.click(radioIngredients);
     userEvent.click(btnSearch);
-
-    /* window.alert = jest.fn();
-    jest.spyOn(Alert, 'alert');
-    expect(window.alert).toHaveBeenCalledTimes(1); */
-
-  /*  await waitFor(() => screen.findByRole('alert'));
-    expect(screen.getByRole('alert')).toHaveTextContent(text); */
   });
 
   it('Testando os inputs drink', () => {
@@ -103,18 +97,14 @@ describe('Testando componente SearchBar', () => {
     const radioIngredients = screen.getByText(/ingredient/i);
     const btnSearch = screen.getByText(/search/i);
 
+    window.alert = jest.fn();
+
     userEvent.type(inputKey, 'tomate');
     userEvent.click(radioIngredients);
     userEvent.click(btnSearch);
 
-    const API = jest.fn();
-    API();
-    expect(API).toHaveBeenCalled();
-
+    expect(window.alert).toBeCalledWith(text2);
     /* window.alert = jest.fn();
     expect(window.alert).toHaveBeenCalledTimes(1); */
-
-    /* const alert = await waitFor(() => screen.findByRole('alert'));
-    expect(alert).toHaveTextContent(text); */
   });
 });

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Header from '../components/Header';
 import MyContext from '../context/MyContext';
 
 export default function DrinkId() {
@@ -7,7 +6,7 @@ export default function DrinkId() {
 
   return (
     <div>
-      <Header />
+
       DrinkId
       {drink}
     </div>

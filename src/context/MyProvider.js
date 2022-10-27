@@ -41,7 +41,7 @@ function MyProvider({ children }) {
     setIngredient(!ingredient);
     setName(false);
     setLetter(false);
-  }, [setIngredient, ingredient, setName, setLetter]);
+  }, [ingredient]);
 
   const handleRadioName = useCallback(() => {
     setName(!name);
@@ -74,6 +74,7 @@ function MyProvider({ children }) {
 
         return setDataFood(dataFirstLetterFood.meals);
       }
+
       return global.alert('Your search must have only 1 (one) character');
     } catch (e) {
       throw new Error(e);
@@ -81,6 +82,7 @@ function MyProvider({ children }) {
   }, [food, ingredient, letter, name]);
 
   const filterDrink = useCallback(async () => {
+    console.log(ingredient);
     try {
       if (ingredient) {
         const responseIngredientsDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drink}`);

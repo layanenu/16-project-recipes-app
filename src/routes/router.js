@@ -17,10 +17,10 @@ function Routers() {
       <Route exact path="/profile" component={ Profile } />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
       <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
-      <Route exact path="/drinks/:id-da-receita" component={ DrinkId } />
-      <Route exact path="/meals/:id-da-receita" component={ MealId } />
-      <Route exact path="/meals/:id-da-receita/in-progress" component={ Meals } />
-      <Route exact path="/drinks/:id-da-receita/in-progress" component={ Drinks } />
+      <Route exact path="/drinks/:id" component={ DrinkId } />
+      <Route exact path="/meals/:id" component={ MealId } />
+      <Route exact path="/meals/:id/in-progress" component={ Meals } />
+      <Route exact path="/drinks/:id/in-progress" component={ Drinks } />
     </Switch>
   );
 }

@@ -61,6 +61,7 @@ function SearchBar() {
               type="radio"
               data-testid="ingredient-search-radio"
               name="ts"
+              id="ingredient-search-radio"
               value={ ingredient }
               onChange={ handleRadioIngredient }
 
@@ -72,6 +73,7 @@ function SearchBar() {
               type="radio"
               data-testid="name-search-radio"
               name="ts"
+              id="name-search-radio"
               value={ name }
               onChange={ handleRadioName }
             />
@@ -82,6 +84,7 @@ function SearchBar() {
               type="radio"
               data-testid="first-letter-search-radio"
               name="ts"
+              id="first-letter-search-radio"
               value={ letter }
               onChange={ handleRadioLetter }
             />

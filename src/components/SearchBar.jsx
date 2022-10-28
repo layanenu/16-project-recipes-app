@@ -7,7 +7,7 @@ function SearchBar() {
 
   const { hideSearchInput,
     ingredient,
-    food,
+    input,
     name,
     letter,
     filterFood,
@@ -40,7 +40,7 @@ function SearchBar() {
             type="text"
             data-testid="search-input"
             placeholder="Search"
-            value={ food }
+            value={ input }
             onChange={ handleInput }
           />
           <label htmlFor="ingredient-search-radio">

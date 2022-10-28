@@ -6,8 +6,7 @@ import MyContext from './MyContext';
 function MyProvider({ children }) {
   const history = useHistory();
   const [hideSearchInput, setHideSearchInput] = useState(false);
-  const [food, setFood] = useState();
-  const [drink, setDrink] = useState();
+  const [input, setInput] = useState();
   const [ingredient, setIngredient] = useState(false);
   const [name, setName] = useState(false);
   const [letter, setLetter] = useState(false);
@@ -17,14 +16,12 @@ function MyProvider({ children }) {
 
   useEffect(() => {
     if (dataDrink?.length === 1) {
-      console.log('aqui', dataDrink[0].idDrink);
       history.push(`/drinks/${dataDrink[0].idDrink}`);
     }
   }, [dataDrink, history]);
 
   useEffect(() => {
     if (dataFood?.length === 1) {
-      console.log('aqui', dataFood[0].idMeal);
       history.push(`/meals/${dataFood[0].idMeal}`);
     }
   }, [dataFood, history]);
@@ -34,8 +31,7 @@ function MyProvider({ children }) {
   }, [hideSearchInput]);
 
   const handleInput = ({ target: { value } }) => {
-    setFood(value);
-    setDrink(value);
+    setInput(value);
   };
 
   const handleRadioIngredient = useCallback(() => {
@@ -71,20 +67,20 @@ function MyProvider({ children }) {
   const filterFood = useCallback(async () => {
     try {
       if (ingredient) {
-        const responseIngredientsFood = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${food}`);
+        const responseIngredientsFood = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${input}`);
         const dataIngredientsFood = await responseIngredientsFood.json();
         setDataFood(dataIngredientsFood.meals);
 
         return verifyApiFood();
       } if (name) {
-        const responseNameFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${food}`);
+        const responseNameFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${input}`);
         const dataNameFood = await responseNameFood.json();
         setDataFood(dataNameFood.meals);
 
         return verifyApiFood();
       }
-      if (letter && food.length === 1) {
-        const responseFirstLetterFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${food[0]}`);
+      if (letter && input.length === 1) {
+        const responseFirstLetterFood = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${input[0]}`);
         const dataFirstLetterFood = await responseFirstLetterFood.json();
         setDataFood(dataFirstLetterFood.meals);
 
@@ -95,25 +91,25 @@ function MyProvider({ children }) {
     } catch (e) {
       throw new Error(e);
     }
-  }, [food, ingredient, letter, name, verifyApiFood]);
+  }, [input, ingredient, letter, name, verifyApiFood]);
 
   const filterDrink = useCallback(async () => {
     try {
       if (ingredient) {
-        const responseIngredientsDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drink}`);
+        const responseIngredientsDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${input}`);
         const dataIngredientsDrink = await responseIngredientsDrink.json();
         setDataDrink(dataIngredientsDrink.drinks);
 
         return verifyApiDrink();
       } if (name) {
-        const responseNameDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`);
+        const responseNameDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${input}`);
         const dataNameDrink = await responseNameDrink.json();
         setDataDrink(dataNameDrink.drinks);
 
         return verifyApiDrink();
       }
-      if (letter && drink.length === 1) {
-        const responseFirstLetterDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${drink[0]}`);
+      if (letter && input.length === 1) {
+        const responseFirstLetterDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${input[0]}`);
         const dataFirstLetterDrink = await responseFirstLetterDrink.json();
         setDataDrink(dataFirstLetterDrink.drinks);
 
@@ -123,33 +119,33 @@ function MyProvider({ children }) {
     } catch (e) {
       throw new Error(e);
     }
-  }, [drink, ingredient, letter, name, verifyApiDrink]);
+  }, [input, ingredient, letter, name, verifyApiDrink]);
 
   const context = useMemo(() => ({ hideSearchInput,
-    setHideSearchInput,
-    hideSearchBar,
     ingredient,
     name,
     letter,
-    food,
+    input,
     dataDrink,
     dataFood,
+    showSearch,
+    setHideSearchInput,
+    hideSearchBar,
     filterDrink,
     filterFood,
     handleInput,
     handleRadioLetter,
     handleRadioName,
     handleRadioIngredient,
-    showSearch,
     setShowSearch }), [filterDrink,
-    dataFood,
-    dataDrink,
-    food,
     filterFood,
     handleRadioIngredient,
     handleRadioLetter,
     handleRadioName,
     hideSearchBar,
+    dataFood,
+    dataDrink,
+    input,
     showSearch, hideSearchInput, ingredient, letter, name]);
 
   return (

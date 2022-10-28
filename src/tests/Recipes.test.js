@@ -113,25 +113,9 @@ describe('Recipes testing', () => {
     const btnDrink2 = await screen.findByRole('button', { name: /cocktail/i }, {}, { timeout: 2000 });
     userEvent.click(btnDrink2);
 
-    waitFor(() => {
+    await waitFor(() => {
       const result = screen.getByText(/155 belmont/i);
       expect(result).toBeInTheDocument();
     });
   });
-
-/*   it('Delete all button', async () => {
-    const { history } = renderWithRouter(<MyProvider><App /></MyProvider>);
-
-    act(() => {
-      history.push('/drinks');
-    });
-
-    const btnDrink6 = screen.getByRole('button', { name: /all/i });
-    userEvent.click(btnDrink6);
-
-    waitFor(() => {
-      const result1 = screen.getByTestId('0-recipe-card');
-      expect(result1).toBeInTheDocument();
-    });
-  }); */
 });

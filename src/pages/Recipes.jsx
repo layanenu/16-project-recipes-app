@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Recipes() {
   const [apiDrink, setApiDrink] = useState([]);
@@ -59,7 +59,7 @@ export default function Recipes() {
   };
 
   const handleClick = async ({ target: { value } }) => {
-    setToggle(!toggle);
+    setToggle((prevState) => !prevState);
     if (toggle) {
       handleDeleteAll();
     }
@@ -118,24 +118,32 @@ export default function Recipes() {
       </div>
       {route === '/meals' ? apiMeals?.filter((x, i) => i < MAX)
         .map((e, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ e.idMeal }>
-            <div data-testid={ `${index}-card-name` }>{e.strMeal}</div>
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ e.strMealThumb }
-              alt={ e.strMeal }
-            />
-          </div>
+          <Link key={ e.idMeal } to={ `/meals/${e.idMeal}` }>
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <div data-testid={ `${index}-card-name` }>{e.strMeal}</div>
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ e.strMealThumb }
+                alt={ e.strMeal }
+              />
+            </div>
+          </Link>
         )) : apiDrink?.filter((x, i) => i < MAX)
         .map((e, index) => (
-          <div data-testid={ `${index}-recipe-card` } key={ e.idDrink }>
-            <div data-testid={ `${index}-card-name` }>{e.strDrink}</div>
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ e.strDrinkThumb }
-              alt={ e.strDrink }
-            />
-          </div>
+          <Link key={ e.idDrink } to={ `/drinks/${e.idDrink}` }>
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <div data-testid={ `${index}-card-name` }>{e.strDrink}</div>
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ e.strDrinkThumb }
+                alt={ e.strDrink }
+              />
+            </div>
+          </Link>
         ))}
     </div>
   );

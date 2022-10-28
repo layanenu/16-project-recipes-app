@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import RecipeDetails from '../components/RecipeDetails';
 import MyContext from '../context/MyContext';
 
 export default function DrinkId() {
@@ -6,7 +7,7 @@ export default function DrinkId() {
 
   return (
     <div>
-
+      <RecipeDetails />
       DrinkId
       {drink}
     </div>

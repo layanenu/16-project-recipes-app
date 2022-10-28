@@ -1,7 +1,11 @@
 import React from 'react';
+import RecipeDetails from '../components/RecipeDetails';
 
 export default function MealId() {
   return (
-    <div>MealId</div>
+    <div>
+      MealId
+      <RecipeDetails />
+    </div>
   );
 }

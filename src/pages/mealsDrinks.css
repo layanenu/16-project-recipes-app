@@ -1,10 +1,10 @@
 .carrosel {
   background-color: blue;
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
   flex-wrap: wrap;
   height: 360px;
-  overflow-x:scroll;
+  overflow-x: scroll;
   width : 360px;
 }
 

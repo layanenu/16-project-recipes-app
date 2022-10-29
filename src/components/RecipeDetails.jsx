@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
 export default function RecipeDetails() {
@@ -50,7 +51,7 @@ export default function RecipeDetails() {
     setMesureMeals(newArray.filter((y) => typeof y === 'string'));
   }
 
-  const handleApiMeals = async () => {
+  const handleApiMeals = useCallback(async () => {
     const require = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await require.json();
     const ts = await meals[0];
@@ -58,9 +59,9 @@ export default function RecipeDetails() {
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setMeals(meals);
-  };
+  }, [id]);
 
-  const handleApiDrinks = async () => {
+  const handleApiDrinks = useCallback(async () => {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
@@ -68,7 +69,7 @@ export default function RecipeDetails() {
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);
-  };
+  }, [id]);
 
   useEffect(() => {
     if (pathname === `/drinks/${id}`) {
@@ -76,7 +77,7 @@ export default function RecipeDetails() {
     } else {
       handleApiMeals();
     }
-  }, []);
+  }, [pathname, id, handleApiDrinks, handleApiMeals]);
 
   return (
     <div>

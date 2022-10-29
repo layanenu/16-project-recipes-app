@@ -13,6 +13,8 @@ function MyProvider({ children }) {
   const [dataFood, setDataFood] = useState([]);
   const [dataDrink, setDataDrink] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [recoDrinks, setRecoDrinks] = useState([]);
+  const [recoMeals, setRecoMeals] = useState([]);
 
   useEffect(() => {
     if (dataDrink?.length === 1) {
@@ -129,6 +131,10 @@ function MyProvider({ children }) {
     dataDrink,
     dataFood,
     showSearch,
+    recoDrinks,
+    recoMeals,
+    setRecoMeals,
+    setRecoDrinks,
     setHideSearchInput,
     hideSearchBar,
     filterDrink,
@@ -146,7 +152,7 @@ function MyProvider({ children }) {
     dataFood,
     dataDrink,
     input,
-    showSearch, hideSearchInput, ingredient, letter, name]);
+    showSearch, hideSearchInput, ingredient, letter, name, recoDrinks, recoMeals]);
 
   return (
     <MyContext.Provider value={ context }>

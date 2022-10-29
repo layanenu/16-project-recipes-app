@@ -1,0 +1,18 @@
+.carrosel {
+  background-color: blue;
+  display: flex;
+  flex-flow: column;
+  flex-wrap: wrap;
+  height: 360px;
+  overflow-x: scroll;
+  width : 360px;
+}
+
+.card {
+  height: 250px;
+  width: 280px;
+}
+
+.image {
+  width: 400px;
+}

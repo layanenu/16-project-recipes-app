@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
+import './RecipeDetails.css';
 
 export default function RecipeDetails() {
   const [m, setMeals] = useState();
@@ -9,9 +10,11 @@ export default function RecipeDetails() {
   const [measureMeals, setMesureMeals] = useState([]);
   const [measureDrinks, setMesureDrinks] = useState([]);
   const { id } = useParams();
-  console.log(id);
+  // console.log(id);
   const { pathname } = useLocation();
-  console.log(m);
+  const history = useHistory();
+
+  // console.log(m);
 
   function proccessArrayIngredient(param) {
     let existstrIngredient = true;
@@ -27,7 +30,7 @@ export default function RecipeDetails() {
       acumulator += 1;
     }
 
-    console.log(newArray);
+    // console.log(newArray);
     setIngredientsDrinks(newArray);
     setIngredientsMeals(newArray);
   }
@@ -54,7 +57,7 @@ export default function RecipeDetails() {
     const require = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await require.json();
     const ts = await meals[0];
-    console.log(ts);
+    // console.log(ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setMeals(meals);
@@ -64,7 +67,7 @@ export default function RecipeDetails() {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
-    console.log(ts);
+    // console.log(ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);
@@ -77,6 +80,14 @@ export default function RecipeDetails() {
       handleApiMeals();
     }
   }, [pathname, id, handleApiDrinks, handleApiMeals]);
+
+  const handleClickDrinkInProgress = () => {
+    history.push(`/drinks/${id}/in-progress`);
+  };
+
+  const handleClickMealInProgress = () => {
+    history.push(`/meals/${id}/in-progress`);
+  };
 
   return (
     <div>
@@ -107,9 +118,30 @@ export default function RecipeDetails() {
               }
             </ul>
           </div>
+          <div>
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              className="button-star-recipe"
+              onClick={ handleClickDrinkInProgress }
+            >
+              Start Recipe
+            </button>
+            <button
+              type="button"
+              data-testid="share-btn"
+            >
+              Compartilhar Receita
+            </button>
+            <button
+              type="button"
+              data-testid="favorite-btn"
+            >
+              Favoritar Receita
+            </button>
+          </div>
         </div>
       )))
-
         : (m?.map((x, a) => (
           <div key={ a }>
             <iframe
@@ -136,11 +168,32 @@ export default function RecipeDetails() {
                         key={ index }
                       >
                         {`${i} ${measureMeals[index]}`}
-
                       </li>
                     ))
                 }
               </ul>
+            </div>
+            <div>
+              <button
+                type="button"
+                data-testid="start-recipe-btn"
+                className="button-star-recipe"
+                onClick={ handleClickMealInProgress }
+              >
+                Start Recipe
+              </button>
+              <button
+                type="button"
+                data-testid="share-btn"
+              >
+                Compartilhar Receita
+              </button>
+              <button
+                type="button"
+                data-testid="favorite-btn"
+              >
+                Favoritar Receita
+              </button>
             </div>
           </div>
         )))}

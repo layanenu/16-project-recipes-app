@@ -15,6 +15,7 @@ function MyProvider({ children }) {
   const [showSearch, setShowSearch] = useState(false);
   const [recoDrinks, setRecoDrinks] = useState([]);
   const [recoMeals, setRecoMeals] = useState([]);
+  const [ingredientsGlobal, setIngredientsGlobal] = useState([]);
 
   useEffect(() => {
     if (dataDrink?.length === 1) {
@@ -133,6 +134,8 @@ function MyProvider({ children }) {
     showSearch,
     recoDrinks,
     recoMeals,
+    ingredientsGlobal,
+    setIngredientsGlobal,
     setRecoMeals,
     setRecoDrinks,
     setHideSearchInput,
@@ -149,6 +152,8 @@ function MyProvider({ children }) {
     handleRadioLetter,
     handleRadioName,
     hideSearchBar,
+    setIngredientsGlobal,
+    ingredientsGlobal,
     dataFood,
     dataDrink,
     input,

@@ -70,7 +70,7 @@ function RecipeInProgress() {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
-    // console.log(ts);
+    // console.log(ts);e
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);

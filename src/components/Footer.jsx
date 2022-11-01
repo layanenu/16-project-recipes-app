@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import '../images/drinkIcon.svg';
 
 function Footer() {
   // const history = useHistory();

@@ -1,16 +1,18 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
+import MyContext from '../context/MyContext';
 import './RecipeDetails.css';
 
 export default function RecipeDetails() {
+  const { setIngredientsGlobal } = useContext(MyContext);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
   const [ingredientsMeals, setIngredientsMeals] = useState([]);
   const [ingredientsDrinks, setIngredientsDrinks] = useState([]);
   const [measureMeals, setMesureMeals] = useState([]);
   const [measureDrinks, setMesureDrinks] = useState([]);
+
   const { id } = useParams();
-  // console.log(id);
   const { pathname } = useLocation();
   const history = useHistory();
 
@@ -33,6 +35,8 @@ export default function RecipeDetails() {
     // console.log(newArray);
     setIngredientsDrinks(newArray);
     setIngredientsMeals(newArray);
+
+    setIngredientsGlobal(newArray);
   }
 
   function proccessArrayMesure(param) {
@@ -67,7 +71,7 @@ export default function RecipeDetails() {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
-    // console.log(ts);
+    console.log(ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);
@@ -81,18 +85,49 @@ export default function RecipeDetails() {
     }
   }, [pathname, id, handleApiDrinks, handleApiMeals]);
 
-  const recipesIngredients = {
+  // console.log(pathname);
+  // const allIngredients = { ...listaDeIngredientesDrinks, ...listaDeIngredientesMeals };
+
+  const listaDeIngredientesDrinks = {
     drinks: {
-      `${id}`: ingredientsDrinks()
+      [`${id}`]: ingredientsDrinks,
+    },
+  };
+
+  const listaDeIngredientesMeals = {
+    meals: {
+      [`${id}`]: ingredientsMeals,
+    },
+  };
+
+  function concactLocalStorage(objectToConcat, stringNameObject) {
+    let rota = '';
+    if (pathname.includes('meals')) {
+      rota = 'meals';
+    } else {
+      rota = 'drinks';
     }
+    let objectString = JSON.parse(localStorage
+      .getItem('inProgressRecipes'));
+    if (!objectString) {
+      objectString = { meals: {}, drinks: {} };
+    }
+    console.log(stringNameObject);
+
+    // const objectString = JSON.parse(objectString);
+    objectString[rota][id] = stringNameObject === 'meals'
+      ? ingredientsMeals : ingredientsDrinks;
+    localStorage.setItem('inProgressRecipes', JSON.stringify(objectString));
   }
 
   const handleClickDrinkInProgress = () => {
     history.push(`/drinks/${id}/in-progress`);
+    concactLocalStorage(listaDeIngredientesDrinks, 'inProgressRecipes');
   };
 
   const handleClickMealInProgress = () => {
     history.push(`/meals/${id}/in-progress`);
+    concactLocalStorage(listaDeIngredientesMeals, 'inProgressRecipes');
   };
 
   return (

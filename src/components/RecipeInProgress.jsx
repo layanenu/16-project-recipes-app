@@ -12,12 +12,14 @@ function RecipeInProgress() {
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
   // const history = useHistory();
+  console.log(measureDrinks, measureMeals, m, d);
   console.log(ingredientsGlobal);
   // const getRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
   // const getRecipesMeals = getRecipes.meals;
   // // const getRecipesDrinks = getRecipes.drinks;
   // console.log(getRecipesMeals);
-
+  const localIngFilter = localIng.filter((el) => typeof el !== 'string' || el !== '');
+  console.log(localIngFilter);
   function proccessArrayIngredient(param) {
     let existstrIngredient = true;
     const newArray = [];
@@ -58,7 +60,7 @@ function RecipeInProgress() {
     const require = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await require.json();
     const ts = await meals[0];
-    // console.log(ts);
+    console.log('opa estou aqui', ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setMeals(meals);
@@ -68,7 +70,7 @@ function RecipeInProgress() {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
-    console.log(ts);
+    // console.log(ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);
@@ -77,7 +79,7 @@ function RecipeInProgress() {
   useEffect(() => {
     console.log(localIng);
     console.log('entrou');
-    if (pathname === `/drinks/${id}`) {
+    if (pathname === `/drinks/${id}/in-progress`) {
       handleApiDrinks();
     } else {
       handleApiMeals();
@@ -122,21 +124,20 @@ function RecipeInProgress() {
       >
         Finish
       </button>
-      {localIng?.filter((el) => typeof el === 'string' || el === '')
-        .map((e, index) => (
-          <label
-            htmlFor={ e }
-            key={ index }
-            data-testid="ingredient-step"
-          >
-            {e}
-            <input
-              type="checkbox"
-              id={ e }
-              value={ e }
-            />
-          </label>
-        ))}
+      {localIngFilter?.map((e, index) => (
+        <label
+          htmlFor={ e }
+          key={ index }
+          data-testid="ingredient-step"
+        >
+          {e}
+          <input
+            type="checkbox"
+            id={ e }
+            value={ e }
+          />
+        </label>
+      ))}
     </div>
 
   );

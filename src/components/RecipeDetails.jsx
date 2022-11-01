@@ -123,6 +123,12 @@ export default function RecipeDetails() {
   const handleClickDrinkInProgress = () => {
     history.push(`/drinks/${id}/in-progress`);
     concactLocalStorage(listaDeIngredientesDrinks, 'inProgressRecipes');
+    const checkDrinkId = JSON.parse(localStorage
+      .getItem('inProgressRecipes'));
+    const chave = Object.keys(checkDrinkId.drinks);
+    const verificarButton = JSON.stringify(chave) === id;
+    console.log(typeof chave);
+    console.log(verificarButton);
   };
 
   const handleClickMealInProgress = () => {

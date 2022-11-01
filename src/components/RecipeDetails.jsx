@@ -81,6 +81,12 @@ export default function RecipeDetails() {
     }
   }, [pathname, id, handleApiDrinks, handleApiMeals]);
 
+  const recipesIngredients = {
+    drinks: {
+      `${id}`: ingredientsDrinks()
+    }
+  }
+
   const handleClickDrinkInProgress = () => {
     history.push(`/drinks/${id}/in-progress`);
   };

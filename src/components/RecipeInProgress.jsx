@@ -11,7 +11,7 @@ function RecipeInProgress() {
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
-  // const history = useHistory();
+  // const history = useHistory()/;
   console.log(measureDrinks, measureMeals, m, d);
   console.log(ingredientsGlobal);
   // const getRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));

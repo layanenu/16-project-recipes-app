@@ -1,13 +1,89 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 
 function RecipeInProgress() {
   const { ingredientsGlobal } = useContext(MyContext);
+  const { id } = useParams();
+  const { pathname } = useLocation();
+  const [localIng, setLocalIngredients] = useState([]);
+  const [measureMeals, setMesureMeals] = useState([]);
+  const [measureDrinks, setMesureDrinks] = useState([]);
+  const [m, setMeals] = useState();
+  const [d, setDrinks] = useState();
+  // const history = useHistory();
   console.log(ingredientsGlobal);
   // const getRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
   // const getRecipesMeals = getRecipes.meals;
   // // const getRecipesDrinks = getRecipes.drinks;
   // console.log(getRecipesMeals);
+
+  function proccessArrayIngredient(param) {
+    let existstrIngredient = true;
+    const newArray = [];
+    let acumulator = 1;
+    while (existstrIngredient) {
+      const ingredient = param[`strIngredient${acumulator}`];
+      if (!ingredient) {
+        existstrIngredient = false;
+      }
+
+      newArray.push(ingredient);
+      acumulator += 1;
+    }
+
+    // console.log(newArray);
+    setLocalIngredients(newArray);
+  }
+
+  function proccessArrayMesure(param) {
+    let existstrIngredient = true;
+    const newArray = [];
+    let acumulator = 1;
+    while (existstrIngredient) {
+      const ingredient = param[`strMeasure${acumulator}`];
+      if (!ingredient) {
+        existstrIngredient = false;
+      }
+
+      newArray.push(ingredient);
+      acumulator += 1;
+    }
+
+    setMesureDrinks(newArray.filter((y) => typeof y === 'string'));
+    setMesureMeals(newArray.filter((y) => typeof y === 'string'));
+  }
+
+  const handleApiMeals = useCallback(async () => {
+    const require = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const { meals } = await require.json();
+    const ts = await meals[0];
+    // console.log(ts);
+    proccessArrayIngredient(ts);
+    proccessArrayMesure(ts);
+    setMeals(meals);
+  }, [id]);
+
+  const handleApiDrinks = useCallback(async () => {
+    const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const { drinks } = await require.json();
+    const ts = await drinks[0];
+    console.log(ts);
+    proccessArrayIngredient(ts);
+    proccessArrayMesure(ts);
+    setDrinks(drinks);
+  }, [id]);
+
+  useEffect(() => {
+    console.log(localIng);
+    console.log('entrou');
+    if (pathname === `/drinks/${id}`) {
+      handleApiDrinks();
+    } else {
+      handleApiMeals();
+    }
+  }, [pathname, id, handleApiDrinks, handleApiMeals]);
+
   return (
     <div className="recipes-progress">
       <h1 data-testid="recipe-title">
@@ -46,7 +122,7 @@ function RecipeInProgress() {
       >
         Finish
       </button>
-      {ingredientsGlobal.filter((el) => typeof el === 'string' || el === '')
+      {localIng?.filter((el) => typeof el === 'string' || el === '')
         .map((e, index) => (
           <label
             htmlFor={ e }

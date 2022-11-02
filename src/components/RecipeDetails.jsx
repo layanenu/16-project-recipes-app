@@ -112,7 +112,7 @@ export default function RecipeDetails() {
       const resultDrink = chaveDrink.find((el) => el === id);
       if (resultDrink === id) {
         setIsProgressRecipe(true);
-      } // e
+      } // ee
     } else {
       console.log('Aqui é a meals', checkId);
       const chaveMeals = Object.keys(checkId?.meals);

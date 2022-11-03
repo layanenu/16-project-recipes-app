@@ -15,6 +15,8 @@ export default function RecipeDetails() {
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [isProgressRecipe, setIsProgressRecipe] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [objFavorito, setObjetoFavorito] = useState({});
+  const [listaFavoriteRecip, setListaFavoriteRecip] = useState([]);
   const { id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
@@ -122,14 +124,13 @@ export default function RecipeDetails() {
       }
     }
   }, []);
-
   const handleCopyBoard = () => {
     copy(`http://localhost:3000${pathname}`);
     setCopied(true);
     console.log(pathname);
   };
-  let listaFavoriteRecip = [];
   let objFavoritos;
+  let isVoid = [];
   const ClickToAddToFavorites = async () => {
     if (pathname === `/meals/${id}`) {
       console.log('entrou aqui em meals');
@@ -142,9 +143,10 @@ export default function RecipeDetails() {
         name: m[0].strMeal,
         image: m[0].strMealThumb,
       };
-      listaFavoriteRecip.setItem('favoriteRecipes', JSON.stringify(...objFavoritos));
+      isVoid.push(objFavoritos);
+      setListaFavoriteRecip(isVoid);
+      console.log(listaFavoriteRecip);
     } else if (pathname === `/drinks/${id}`) {
-      console.log('entrou aqui em drinks');
       objFavoritos = {
         id: d[0].idDrink,
         type: 'Drinks',
@@ -153,14 +155,14 @@ export default function RecipeDetails() {
         alcoholicOrNot: d[0].strAlcoholic,
         name: d[0].strDrink,
         image: d[0].strDrinkThumb,
-        //a
       };
-      listaFavoriteRecip.setItem('favoriteRecipes', JSON.stringify(...objFavoritos));
+      listaFavoriteRecip.push(objFavoritos);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(listaFavoriteRecip));
     }
-    let myConst = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    myConst = [...myConst, objFavoritos];
-    console.log(myConst);
-    localStorage.setItem('favoriteRecipes', myConst);
+    // let myConst = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    // myConst = [myConst, ...objFavoritos];
+    // console.log(myConst);
+    // localStorage.setItem('favoriteRecipes', myConst);
     // console.log(listaFavoriteRecip);
     // localStorage.setItem('favoriteRecipes', JSON.stringify(...listaFavoriteRecip));
     // const verifyLocalStorage = localStorage.getItem('favoriteRecipes')
@@ -176,6 +178,16 @@ export default function RecipeDetails() {
     // });
     // listaFavoritos.push(listaFavoritos);
   };
+  useEffect(() => {
+    isVoid = localStorage.getItem('favoriteRecipes');
+    if (isVoid === null) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify(listaFavoriteRecip));
+    } else {
+      const arrayFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+      arrayFav.push(objFavoritos);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(arrayFav));
+    }
+  }, [listaFavoriteRecip]);
   return (
     <div>
       {pathname === `/drinks/${id}` ? (d?.map((x, b) => (

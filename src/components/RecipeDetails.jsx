@@ -153,6 +153,7 @@ export default function RecipeDetails() {
         alcoholicOrNot: d[0].strAlcoholic,
         name: d[0].strDrink,
         image: d[0].strDrinkThumb,
+        //a
       };
       listaFavoriteRecip.setItem('favoriteRecipes', JSON.stringify(...objFavoritos));
     }

@@ -4,7 +4,7 @@ import MyContext from '../context/MyContext';
 import './mealsDrinks.css';
 
 export default function DrinkId() {
-  const { recoMeals, drink, setRecoMeals } = useContext(MyContext);
+  const { recoMeals, setRecoMeals } = useContext(MyContext);
   const MAX = 6;
 
   const handleAPI = async () => {
@@ -20,8 +20,6 @@ export default function DrinkId() {
   return (
     <div>
       <RecipeDetails />
-      DrinkId
-      {drink}
       <div className="carrosel">
         { recoMeals?.filter((x, i) => i < MAX)
           .map((e, index) => (

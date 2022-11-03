@@ -19,7 +19,6 @@ export default function MealId() {
 
   return (
     <div>
-      MealId
       <RecipeDetails />
       <div className="carrosel">
         { recoDrinks?.filter((x, i) => i < MAX)

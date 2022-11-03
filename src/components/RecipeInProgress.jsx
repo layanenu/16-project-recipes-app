@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import MyContext from '../context/MyContext';
+import '../App.css';
 
 function RecipeInProgress() {
   const { ingredientsGlobal } = useContext(MyContext);
@@ -86,6 +87,28 @@ function RecipeInProgress() {
     }
   }, [pathname, id, handleApiDrinks, handleApiMeals]);
 
+  const handleMarked = (e) => {
+    console.log(e);
+    const getLabel = document.querySelectorAll('label[class=label]')[e];
+    if (getLabel.style.textDecoration !== '') {
+      getLabel.style.textDecoration = '';
+      return;
+    }
+    // console.log(document.getElementById(e).classList.add('line'));
+    getLabel.style.textDecoration = 'line-through solid rgb(0, 0, 0)';
+
+    // target.className = 'line';
+    // console.log(target.className);
+  };
+
+  // const toggle = () => {
+  //   setChecked(!checked);
+  // };
+
+  // const handleLabel = ({ target }) => {
+  //   target.className = 'line';
+  // };
+
   return (
     <div className="recipes-progress">
       <h1 data-testid="recipe-title">
@@ -125,18 +148,21 @@ function RecipeInProgress() {
         Finish
       </button>
       {localIngFilter?.map((e, index) => (
-        <label
-          htmlFor={ e }
-          key={ index }
-          data-testid="ingredient-step"
-        >
-          {e}
-          <input
-            type="checkbox"
-            id={ e }
-            value={ e }
-          />
-        </label>
+        <div key={ index }>
+          <label
+            htmlFor={ e }
+            data-testid="ingredient-step"
+            className="label"
+          >
+            {e}
+            <input
+              type="checkbox"
+              id={ e }
+              value={ e }
+              onChange={ () => handleMarked(index) }
+            />
+          </label>
+        </div>
       ))}
     </div>
 

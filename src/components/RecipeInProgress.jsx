@@ -86,10 +86,10 @@ function RecipeInProgress() {
     });
     console.log(localIng);
     setLocalIngredients(newLocalIng);
-    localStorage.setItem('inProgressRecipes2', JSON.stringify(newLocalIng));
-    const myConstant = localStorage.getItem('inProgressRecipes');
-    const myMeals = myConstant.meals;
-    console.log(myMeals);
+    // localStorage.setItem('inProgressRecipes2', JSON.stringify(newLocalIng));
+    // const myConstant = localStorage.getItem('inProgressRecipes');
+    // const myMeals = myConstant.meals;
+    // console.log(myMeals);
   };
 
   return (

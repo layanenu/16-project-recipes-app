@@ -128,8 +128,53 @@ export default function RecipeDetails() {
     setCopied(true);
     console.log(pathname);
   };
-  const ClickToAddToFavorites = () => {
-    console.log();
+  let listaFavoriteRecip = [];
+  let objFavoritos;
+  const ClickToAddToFavorites = async () => {
+    if (pathname === `/meals/${id}`) {
+      console.log('entrou aqui em meals');
+      objFavoritos = {
+        id: m[0].idMeal,
+        type: 'Meals',
+        nationality: m[0].strArea || '',
+        category: m[0].strCategory || '',
+        alcoholicOrNot: '',
+        name: m[0].strMeal,
+        image: m[0].strMealThumb,
+      };
+      listaFavoriteRecip.setItem('favoriteRecipes', JSON.stringify(...objFavoritos));
+    } else if (pathname === `/drinks/${id}`) {
+      console.log('entrou aqui em drinks');
+      objFavoritos = {
+        id: d[0].idDrink,
+        type: 'Drinks',
+        nationality: d[0].strArea || '',
+        category: d[0].strCategory || '',
+        alcoholicOrNot: d[0].strAlcoholic,
+        name: d[0].strDrink,
+        image: d[0].strDrinkThumb,
+        //a
+      };
+      listaFavoriteRecip.setItem('favoriteRecipes', JSON.stringify(...objFavoritos));
+    }
+    let myConst = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    myConst = [...myConst, objFavoritos];
+    console.log(myConst);
+    localStorage.setItem('favoriteRecipes', myConst);
+    // console.log(listaFavoriteRecip);
+    // localStorage.setItem('favoriteRecipes', JSON.stringify(...listaFavoriteRecip));
+    // const verifyLocalStorage = localStorage.getItem('favoriteRecipes')
+    // if()
+    // listaFavoritos.push({
+    //   id: listaFavoritos.idMeal || listaFavoritos.idDrink,
+    //   type: 'drink',
+    //   nationality: listaFavoritos.strArea || '',
+    //   alcoholicOrNot: listaFavoritos.strAlcoholic,
+    //   name: listaFavoritos.strDrink || listaFavoritos.strMeal,
+    //   image: listaFavoritos.strDrinkThumb || listaFavoritos.strMealThumb,
+    //   category: listaFavoritos.strCategory || '',
+    // });
+    // listaFavoritos.push(listaFavoritos);
   };
   return (
     <div>

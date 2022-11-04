@@ -20,7 +20,6 @@ function RecipeInProgress() {
     if (myProgress === null) {
       return false;
     }
-
     let myArrayIngredientChecked = '';
     if (pathname.includes('meals')) {
       myArrayIngredientChecked = myProgress?.meals[id];

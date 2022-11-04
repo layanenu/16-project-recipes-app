@@ -5,25 +5,30 @@ import '../App.css';
 
 function RecipeInProgress() {
   const { ingredientsGlobal } = useContext(MyContext);
-  const { id } = useParams();
-  const { pathname } = useLocation();
   const [localIng, setLocalIngredients] = useState([]);
   const [measureMeals, setMesureMeals] = useState([]);
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
   const [recipesInProgress, setRecipesInProgress] = useState();
-  console.log(ingredientsGlobal);
+  const { id } = useParams();
+  const { pathname } = useLocation();
+  console.log(ingredientsGlobal, measureMeals, measureDrinks, m, d, recipesInProgress);
 
-  const myFunciton = (elemento) => {
-    console.log(elemento);
+  const myFunction = (elemento) => {
     const myProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (myProgress === null) {
       return false;
     }
-    const myArrayIngredientChecked = myProgress.meals[id];
+
+    let myArrayIngredientChecked = '';
+    if (pathname.includes('meals')) {
+      myArrayIngredientChecked = myProgress?.meals[id];
+    } else {
+      myArrayIngredientChecked = myProgress?.drinks[id];
+    }
     const elementFind = myArrayIngredientChecked
-      ?.find((el) => el.ingredient === elemento);
+      ?.find((el) => el?.ingredient === elemento);
     return elementFind?.checked;
   };
 
@@ -42,7 +47,7 @@ function RecipeInProgress() {
     }
     setLocalIngredients(newArray
       .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
-      .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) })));
+      .map(({ ingredient }) => ({ ingredient, checked: myFunction(ingredient) })));
   }
 
   function proccessArrayMesure(param) {
@@ -109,28 +114,25 @@ function RecipeInProgress() {
   };
 
   useEffect(() => {
-    // setRecipesInProgress(myProgress);
   }, [setRecipesInProgress]);
 
   return (
     <div className="recipes-progress">
       <h1 data-testid="recipe-title">
-        Title
+        Receita em progresso
       </h1>
       <img
         data-testid="recipe-photo"
         src=""
         alt=""
       />
-
-      <div data-testid="recipe-category">
-
-        dd
-      </div>
+      <h3 data-testid="recipe-category">
+        Categoria da receita
+      </h3>
       <div
         data-testid="instructions"
       >
-        1
+        Instruções da receita
       </div>
       <button
         type="button"
@@ -148,8 +150,11 @@ function RecipeInProgress() {
         data-testid="finish-recipe-btn"
         type="button"
       >
-        Finish
+        Finalizar receita
       </button>
+      <h5>
+        Marque o ingrediente conforme você for adicionando à sua receita:
+      </h5>
       {localIng?.map((e, index) => (
         <div key={ index }>
           <label
@@ -157,20 +162,18 @@ function RecipeInProgress() {
             className={ e.checked ? 'line' : '' }
             data-testid={ `${index}-ingredient-step` }
           >
-            {e.ingredient}
             <input
               type="checkbox"
               id={ e.ingredient }
               value={ e.ingredient }
               onChange={ () => handleMarked(index) }
-              checked={ myFunciton(e.ingredient) }
+              checked={ myFunction(e.ingredient) }
             />
+            {e.ingredient}
           </label>
         </div>
       ))}
     </div>
-
   );
 }
-
 export default RecipeInProgress;

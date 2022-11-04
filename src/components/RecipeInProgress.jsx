@@ -21,9 +21,15 @@ function RecipeInProgress() {
     if (myProgress === null) {
       return false;
     }
-    const myArrayIngredientChecked = myProgress.meals[id];
+    let myArrayIngredientChecked = '';
+    if (pathname.includes('meals')) {
+      myArrayIngredientChecked = myProgress?.meals[id];
+    } else {
+      myArrayIngredientChecked = myProgress?.drinks[id];
+    }
+    // const myArrayIngredientChecked = myProgress.meals[id];
     const elementFind = myArrayIngredientChecked
-      ?.find((el) => el.ingredient === elemento);
+      ?.find((el) => el?.ingredient === elemento);
     return elementFind?.checked;
   };
 
@@ -162,7 +168,6 @@ function RecipeInProgress() {
             className={ e.checked ? 'line' : '' }
             data-testid={ `${index}-ingredient-step` }
           >
-            {e.ingredient}
             <input
               type="checkbox"
               id={ e.ingredient }
@@ -170,6 +175,7 @@ function RecipeInProgress() {
               onChange={ () => handleMarked(index) }
               checked={ myFunciton(e.ingredient) }
             />
+            {e.ingredient}
           </label>
         </div>
       ))}

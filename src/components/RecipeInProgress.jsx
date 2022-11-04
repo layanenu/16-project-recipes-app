@@ -12,15 +12,11 @@ function RecipeInProgress() {
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
-  // const history = useHistory()/;
   console.log(measureDrinks, measureMeals, m, d);
   console.log(ingredientsGlobal);
-  // const getRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-  // const getRecipesMeals = getRecipes.meals;
-  // // const getRecipesDrinks = getRecipes.drinks;
-  // console.log(getRecipesMeals);
-  const localIngFilter = localIng.filter((el) => typeof el !== 'string' || el !== '');
-  console.log(localIngFilter);
+
+  const localIngFilter = localIng
+    .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '');
   function proccessArrayIngredient(param) {
     let existstrIngredient = true;
     const newArray = [];
@@ -29,13 +25,11 @@ function RecipeInProgress() {
       const ingredient = param[`strIngredient${acumulator}`];
       if (!ingredient) {
         existstrIngredient = false;
+      } else {
+        newArray.push({ ingredient, checked: false });
+        acumulator += 1;
       }
-
-      newArray.push(ingredient);
-      acumulator += 1;
     }
-
-    // console.log(newArray);
     setLocalIngredients(newArray);
   }
 
@@ -48,11 +42,9 @@ function RecipeInProgress() {
       if (!ingredient) {
         existstrIngredient = false;
       }
-
       newArray.push(ingredient);
       acumulator += 1;
     }
-
     setMesureDrinks(newArray.filter((y) => typeof y === 'string'));
     setMesureMeals(newArray.filter((y) => typeof y === 'string'));
   }
@@ -61,7 +53,6 @@ function RecipeInProgress() {
     const require = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await require.json();
     const ts = await meals[0];
-    console.log('opa estou aqui', ts);
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setMeals(meals);
@@ -78,8 +69,6 @@ function RecipeInProgress() {
   }, [id]);
 
   useEffect(() => {
-    // console.log(localIng);
-    console.log('entrou');
     if (pathname === `/drinks/${id}/in-progress`) {
       handleApiDrinks();
     } else {
@@ -89,25 +78,19 @@ function RecipeInProgress() {
 
   const handleMarked = (e) => {
     console.log(e);
-    const getLabel = document.querySelectorAll('label[class=label]')[e];
-    if (getLabel.style.textDecoration !== '') {
-      getLabel.style.textDecoration = '';
-      return;
-    }
-    // console.log(document.getElementById(e).classList.add('line'));
-    getLabel.style.textDecoration = 'line-through solid rgb(0, 0, 0)';
-
-    // target.className = 'line';
-    // console.log(target.className);
+    const newLocalIng = localIng.map((el, index) => {
+      if (e === index) {
+        el.checked = !el.checked;
+      }
+      return el;
+    });
+    console.log(localIng);
+    setLocalIngredients(newLocalIng);
+    // localStorage.setItem('inProgressRecipes2', JSON.stringify(newLocalIng));
+    // const myConstant = localStorage.getItem('inProgressRecipes');
+    // const myMeals = myConstant.meals;
+    // console.log(myMeals);
   };
-
-  // const toggle = () => {
-  //   setChecked(!checked);
-  // };
-
-  // const handleLabel = ({ target }) => {
-  //   target.className = 'line';
-  // };
 
   return (
     <div className="recipes-progress">
@@ -150,16 +133,17 @@ function RecipeInProgress() {
       {localIngFilter?.map((e, index) => (
         <div key={ index }>
           <label
-            htmlFor={ e }
-            data-testid="ingredient-step"
-            className="label"
+            htmlFor={ e.ingredient }
+            className={ e.checked ? 'line' : '' }
+            data-testid={ `${index}-ingredient-step` }
           >
-            {e}
+            {e.ingredient}
             <input
               type="checkbox"
-              id={ e }
-              value={ e }
+              id={ e.ingredient }
+              value={ e.ingredient }
               onChange={ () => handleMarked(index) }
+              checked={ e.checked }
             />
           </label>
         </div>

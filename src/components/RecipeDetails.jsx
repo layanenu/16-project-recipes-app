@@ -98,27 +98,28 @@ export default function RecipeDetails() {
   }
   const handleClickDrinkInProgress = () => {
     history.push(`/drinks/${id}/in-progress`);
-    concactLocalStorage(listaDeIngredientesDrinks, 'inProgressRecipes');
+    concactLocalStorage(listaDeIngredientesDrinks, 'drinks');
   };
   const handleClickMealInProgress = () => {
     history.push(`/meals/${id}/in-progress`);
-    concactLocalStorage(listaDeIngredientesMeals, 'inProgressRecipes');
+    concactLocalStorage(listaDeIngredientesMeals, 'meals');
   };
 
   useEffect(() => {
     const checkId = JSON.parse(localStorage
       .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
     if (pathname.includes('drinks')) {
-      console.log('AQui é a drinks', checkId);
-      const chaveDrink = Object.keys(checkId?.drinks);
-      const resultDrink = chaveDrink.find((el) => el === id);
+      const chaveDrink = checkId.drinks
+        && Object.keys(checkId.drinks).find((el) => el === id);
+      const resultDrink = chaveDrink;
       if (resultDrink === id) {
         setIsProgressRecipe(true);
       } // ee
     } else {
-      console.log('Aqui é a meals', checkId);
-      const chaveMeals = Object.keys(checkId?.meals);
-      const resultMeal = chaveMeals.find((el) => el === id);
+      const chaveMeals = checkId.meals && Object.keys(checkId.meals)
+        .find((el) => el === id);
+      console.log(chaveMeals, checkId, 'id');
+      const resultMeal = chaveMeals;
       if (resultMeal === id) {
         setIsProgressRecipe(true);
       }
@@ -127,13 +128,11 @@ export default function RecipeDetails() {
   const handleCopyBoard = () => {
     copy(`http://localhost:3000${pathname}`);
     setCopied(true);
-    console.log(pathname);
   };
-  let objFavoritos;
-  let isVoid = [];
+
   const ClickToAddToFavorites = async () => {
+    let objFavoritos;
     if (pathname === `/meals/${id}`) {
-      console.log('entrou aqui em meals');
       objFavoritos = {
         id: m[0].idMeal,
         type: 'Meals',
@@ -143,9 +142,7 @@ export default function RecipeDetails() {
         name: m[0].strMeal,
         image: m[0].strMealThumb,
       };
-      isVoid.push(objFavoritos);
-      setListaFavoriteRecip(isVoid);
-      console.log(listaFavoriteRecip);
+      setListaFavoriteRecip(objFavoritos);
     } else if (pathname === `/drinks/${id}`) {
       objFavoritos = {
         id: d[0].idDrink,
@@ -156,38 +153,11 @@ export default function RecipeDetails() {
         name: d[0].strDrink,
         image: d[0].strDrinkThumb,
       };
-      listaFavoriteRecip.push(objFavoritos);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(listaFavoriteRecip));
-    }
-    // let myConst = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    // myConst = [myConst, ...objFavoritos];
-    // console.log(myConst);
-    // localStorage.setItem('favoriteRecipes', myConst);
-    // console.log(listaFavoriteRecip);
-    // localStorage.setItem('favoriteRecipes', JSON.stringify(...listaFavoriteRecip));
-    // const verifyLocalStorage = localStorage.getItem('favoriteRecipes')
-    // if()
-    // listaFavoritos.push({
-    //   id: listaFavoritos.idMeal || listaFavoritos.idDrink,
-    //   type: 'drink',
-    //   nationality: listaFavoritos.strArea || '',
-    //   alcoholicOrNot: listaFavoritos.strAlcoholic,
-    //   name: listaFavoritos.strDrink || listaFavoritos.strMeal,
-    //   image: listaFavoritos.strDrinkThumb || listaFavoritos.strMealThumb,
-    //   category: listaFavoritos.strCategory || '',
-    // });
-    // listaFavoritos.push(listaFavoritos);
+      // listaFavoriteRecip.push(objFavoritos);
+    } // FALTA A CONDINCIONAL PARA NÃO DUPLICAR AS MESMAS RECEITAS
+    const myConst = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    localStorage.setItem('favoriteRecipes', JSON.stringify([...myConst, objFavoritos]));
   };
-  useEffect(() => {
-    isVoid = localStorage.getItem('favoriteRecipes');
-    if (isVoid === null) {
-      localStorage.setItem('favoriteRecipes', JSON.stringify(listaFavoriteRecip));
-    } else {
-      const arrayFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      arrayFav.push(objFavoritos);
-      localStorage.setItem('favoriteRecipes', JSON.stringify(arrayFav));
-    }
-  }, [listaFavoriteRecip]);
   return (
     <div>
       {pathname === `/drinks/${id}` ? (d?.map((x, b) => (

@@ -12,11 +12,21 @@ function RecipeInProgress() {
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
-  console.log(measureDrinks, measureMeals, m, d);
+  const [recipesInProgress, setRecipesInProgress] = useState();
   console.log(ingredientsGlobal);
 
-  const localIngFilter = localIng
-    .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '');
+  const myFunciton = (elemento) => {
+    console.log(elemento);
+    const myProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (myProgress === null) {
+      return false;
+    }
+    const myArrayIngredientChecked = myProgress.meals[id];
+    const elementFind = myArrayIngredientChecked
+      ?.find((el) => el.ingredient === elemento);
+    return elementFind?.checked;
+  };
+
   function proccessArrayIngredient(param) {
     let existstrIngredient = true;
     const newArray = [];
@@ -30,7 +40,9 @@ function RecipeInProgress() {
         acumulator += 1;
       }
     }
-    setLocalIngredients(newArray);
+    setLocalIngredients(newArray
+      .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
+      .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) })));
   }
 
   function proccessArrayMesure(param) {
@@ -62,7 +74,6 @@ function RecipeInProgress() {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
     const ts = await drinks[0];
-    // console.log(ts);e
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setDrinks(drinks);
@@ -77,20 +88,34 @@ function RecipeInProgress() {
   }, [pathname, id, handleApiDrinks, handleApiMeals]);
 
   const handleMarked = (e) => {
-    console.log(e);
     const newLocalIng = localIng.map((el, index) => {
       if (e === index) {
         el.checked = !el.checked;
       }
       return el;
     });
-    console.log(localIng);
+    // console.log(localIng, 'localing linha 82');
     setLocalIngredients(newLocalIng);
-    // localStorage.setItem('inProgressRecipes2', JSON.stringify(newLocalIng));
-    // const myConstant = localStorage.getItem('inProgressRecipes');
-    // const myMeals = myConstant.meals;
-    // console.log(myMeals);
+    console.log(newLocalIng);
+    const myConstant = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    if (pathname.includes('drinks')) {
+      // const newObjIng = myConstant.drinks[id];
+      myConstant.drinks[id] = newLocalIng;
+      localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
+    } else {
+      // const newObjIng = myConstant.meals[id];
+      myConstant.meals[id] = newLocalIng;
+      localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
+    }
   };
+  // console.log(myFunciton(localIngFilter));
+  // const localIngFilter = localIng
+  //   .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
+  //   .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) }));
+
+  useEffect(() => {
+    // setRecipesInProgress(myProgress);
+  }, [setRecipesInProgress]);
 
   return (
     <div className="recipes-progress">
@@ -130,7 +155,7 @@ function RecipeInProgress() {
       >
         Finish
       </button>
-      {localIngFilter?.map((e, index) => (
+      {localIng?.map((e, index) => (
         <div key={ index }>
           <label
             htmlFor={ e.ingredient }
@@ -143,7 +168,7 @@ function RecipeInProgress() {
               id={ e.ingredient }
               value={ e.ingredient }
               onChange={ () => handleMarked(index) }
-              checked={ e.checked }
+              checked={ myFunciton(e.ingredient) }
             />
           </label>
         </div>

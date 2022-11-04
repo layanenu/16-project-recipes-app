@@ -15,11 +15,11 @@ export default function RecipeDetails() {
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [isProgressRecipe, setIsProgressRecipe] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [objFavorito, setObjetoFavorito] = useState({});
   const [listaFavoriteRecip, setListaFavoriteRecip] = useState([]);
   const { id } = useParams();
   const { pathname } = useLocation();
   const history = useHistory();
+  console.log(listaFavoriteRecip);
   function proccessArrayIngredient(param) {
     let existstrIngredient = true;
     const newArray = [];

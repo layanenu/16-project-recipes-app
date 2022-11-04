@@ -5,18 +5,17 @@ import '../App.css';
 
 function RecipeInProgress() {
   const { ingredientsGlobal } = useContext(MyContext);
-  const { id } = useParams();
-  const { pathname } = useLocation();
   const [localIng, setLocalIngredients] = useState([]);
   const [measureMeals, setMesureMeals] = useState([]);
   const [measureDrinks, setMesureDrinks] = useState([]);
   const [m, setMeals] = useState();
   const [d, setDrinks] = useState();
   const [recipesInProgress, setRecipesInProgress] = useState();
-  console.log(ingredientsGlobal);
+  const { id } = useParams();
+  const { pathname } = useLocation();
+  console.log(ingredientsGlobal, measureMeals, measureDrinks, m, d, recipesInProgress);
 
-  const myFunciton = (elemento) => {
-    console.log(elemento);
+  const myFunction = (elemento) => {
     const myProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (myProgress === null) {
       return false;
@@ -27,7 +26,6 @@ function RecipeInProgress() {
     } else {
       myArrayIngredientChecked = myProgress?.drinks[id];
     }
-    // const myArrayIngredientChecked = myProgress.meals[id];
     const elementFind = myArrayIngredientChecked
       ?.find((el) => el?.ingredient === elemento);
     return elementFind?.checked;
@@ -48,7 +46,7 @@ function RecipeInProgress() {
     }
     setLocalIngredients(newArray
       .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
-      .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) })));
+      .map(({ ingredient }) => ({ ingredient, checked: myFunction(ingredient) })));
   }
 
   function proccessArrayMesure(param) {
@@ -100,48 +98,40 @@ function RecipeInProgress() {
       }
       return el;
     });
-    // console.log(localIng, 'localing linha 82');
+
     setLocalIngredients(newLocalIng);
-    console.log(newLocalIng);
-    const myConstant = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    const myConstant = JSON.parse(localStorage
+      .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
+    console.log(localStorage.getItem('inProgressRecipes'));
     if (pathname.includes('drinks')) {
-      // const newObjIng = myConstant.drinks[id];
       myConstant.drinks[id] = newLocalIng;
       localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
     } else {
-      // const newObjIng = myConstant.meals[id];
       myConstant.meals[id] = newLocalIng;
       localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
     }
   };
-  // console.log(myFunciton(localIngFilter));
-  // const localIngFilter = localIng
-  //   .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
-  //   .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) }));
 
   useEffect(() => {
-    // setRecipesInProgress(myProgress);
   }, [setRecipesInProgress]);
 
   return (
     <div className="recipes-progress">
       <h1 data-testid="recipe-title">
-        Title
+        Receita em progresso
       </h1>
       <img
         data-testid="recipe-photo"
         src=""
         alt=""
       />
-
-      <div data-testid="recipe-category">
-
-        dd
-      </div>
+      <h3 data-testid="recipe-category">
+        Categoria da receita
+      </h3>
       <div
         data-testid="instructions"
       >
-        1
+        Instruções da receita
       </div>
       <button
         type="button"
@@ -159,8 +149,11 @@ function RecipeInProgress() {
         data-testid="finish-recipe-btn"
         type="button"
       >
-        Finish
+        Finalizar receita
       </button>
+      <h5>
+        Marque o ingrediente conforme você for adicionando à sua receita:
+      </h5>
       {localIng?.map((e, index) => (
         <div key={ index }>
           <label
@@ -173,15 +166,13 @@ function RecipeInProgress() {
               id={ e.ingredient }
               value={ e.ingredient }
               onChange={ () => handleMarked(index) }
-              checked={ myFunciton(e.ingredient) }
+              checked={ myFunction(e.ingredient) }
             />
             {e.ingredient}
           </label>
         </div>
       ))}
     </div>
-
   );
 }
-
 export default RecipeInProgress;

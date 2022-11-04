@@ -94,24 +94,19 @@ function RecipeInProgress() {
       }
       return el;
     });
-    // console.log(localIng, 'localing linha 82');
+
     setLocalIngredients(newLocalIng);
-    console.log(newLocalIng);
-    const myConstant = JSON.parse(localStorage.getItem('inProgressRecipes')) || [];
+    const myConstant = JSON.parse(localStorage
+      .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
+    console.log(localStorage.getItem('inProgressRecipes'));
     if (pathname.includes('drinks')) {
-      // const newObjIng = myConstant.drinks[id];
       myConstant.drinks[id] = newLocalIng;
       localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
     } else {
-      // const newObjIng = myConstant.meals[id];
       myConstant.meals[id] = newLocalIng;
       localStorage.setItem('inProgressRecipes', JSON.stringify(myConstant));
     }
   };
-  // console.log(myFunciton(localIngFilter));
-  // const localIngFilter = localIng
-  //   .filter((el) => typeof el.ingredient !== 'string' || el.ingredient !== '')
-  //   .map(({ ingredient }) => ({ ingredient, checked: myFunciton(ingredient) }));
 
   useEffect(() => {
     // setRecipesInProgress(myProgress);

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useContext } from 'react';
+import { useCallback, useState, useEffect, useContext } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 import './RecipeDetails.css';
@@ -20,7 +20,8 @@ export default function RecipeDetails() {
   const { pathname } = useLocation();
   const history = useHistory();
   console.log(listaFavoriteRecip);
-  function proccessArrayIngredient(param) {
+
+  const proccessArrayIngredient = useCallback((param) => {
     let existstrIngredient = true;
     const newArray = [];
     let acumulator = 1;
@@ -35,7 +36,7 @@ export default function RecipeDetails() {
     setIngredientsDrinks(newArray);
     setIngredientsMeals(newArray);
     setIngredientsGlobal(newArray);
-  }
+  }, []);
   function proccessArrayMesure(param) {
     let existstrIngredient = true;
     const newArray = [];
@@ -58,7 +59,7 @@ export default function RecipeDetails() {
     proccessArrayIngredient(ts);
     proccessArrayMesure(ts);
     setMeals(meals);
-  }, [id]);
+  }, [id, proccessArrayIngredient]);
   const handleApiDrinks = useCallback(async () => {
     const require = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await require.json();
@@ -104,7 +105,6 @@ export default function RecipeDetails() {
     history.push(`/meals/${id}/in-progress`);
     concactLocalStorage(listaDeIngredientesMeals, 'meals');
   };
-
   useEffect(() => {
     const checkId = JSON.parse(localStorage
       .getItem('inProgressRecipes')) || { meals: {}, drinks: {} };
@@ -114,22 +114,20 @@ export default function RecipeDetails() {
       const resultDrink = chaveDrink;
       if (resultDrink === id) {
         setIsProgressRecipe(true);
-      } // ee
+      }
     } else {
       const chaveMeals = checkId.meals && Object.keys(checkId.meals)
         .find((el) => el === id);
-      console.log(chaveMeals, checkId, 'id');
       const resultMeal = chaveMeals;
       if (resultMeal === id) {
         setIsProgressRecipe(true);
       }
     }
-  }, []);
+  }, [id, pathname]);
   const handleCopyBoard = () => {
     copy(`http://localhost:3000${pathname}`);
     setCopied(true);
   };
-
   const ClickToAddToFavorites = async () => {
     let objFavoritos;
     if (pathname === `/meals/${id}`) {
@@ -153,8 +151,7 @@ export default function RecipeDetails() {
         name: d[0].strDrink,
         image: d[0].strDrinkThumb,
       };
-      // listaFavoriteRecip.push(objFavoritos);
-    } // FALTA A CONDINCIONAL PARA NÃO DUPLICAR AS MESMAS RECEITAS
+    }
     const myConst = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     localStorage.setItem('favoriteRecipes', JSON.stringify([...myConst, objFavoritos]));
   };
@@ -173,17 +170,14 @@ export default function RecipeDetails() {
           <div>
             <h3>Ingredients</h3>
             <ul>
-              {
-                ingredientsDrinks.filter((y) => typeof y === 'string')
-                  .map((i, ind) => (
-                    <li
-                      data-testid={ `${ind}-ingredient-name-and-measure` }
-                      key={ ind }
-                    >
-                      {`${i} ${measureDrinks[ind]}`}
-                    </li>
-                  ))
-              }
+              { ingredientsDrinks.filter((y) => typeof y === 'string').map((i, ind) => (
+                <li
+                  data-testid={ `${ind}-ingredient-name-and-measure` }
+                  key={ ind }
+                >
+                  {`${i} ${measureDrinks[ind]}`}
+                </li>
+              ))}
             </ul>
           </div>
           <div>
@@ -231,17 +225,15 @@ export default function RecipeDetails() {
             <div>
               <h3>Ingredients</h3>
               <ul>
-                {
-                  ingredientsMeals.filter((y) => typeof y === 'string')
-                    .map((i, index) => (
-                      <li
-                        data-testid={ `${index}-ingredient-name-and-measure` }
-                        key={ index }
-                      >
-                        {`${i} ${measureMeals[index]}`}
-                      </li>
-                    ))
-                }
+                { ingredientsMeals.filter((y) => typeof y === 'string')
+                  .map((i, index) => (
+                    <li
+                      data-testid={ `${index}-ingredient-name-and-measure` }
+                      key={ index }
+                    >
+                      {`${i} ${measureMeals[index]}`}
+                    </li>
+                  ))}
               </ul>
             </div>
             <div>
@@ -260,7 +252,7 @@ export default function RecipeDetails() {
               >
                 <img src="../images/shareIcon.svg" alt="Compartilhar Receita" />
               </button>
-              {copied && <p>Link copied!</p> }
+              { copied && <p>Link copied!</p> }
               <button
                 type="button"
                 data-testid="favorite-btn"
